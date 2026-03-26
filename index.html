@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Give Me Your Credit Card Number</title>
+  <style>
+    body { text-align: center; margin-top: 50px; font-family: sans-serif; }
+    h1 { font-size: 4em; }
+    button { font-size: 2em; padding: 0.5em 1em; margin-top: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1 id="count">0</h1>
+  <button id="increment">+1</button>
+
+  <script>
+    const countEl = document.getElementById('count');
+    const btn = document.getElementById('increment');
+    btn.addEventListener('click', () => {
+      let current = parseInt(countEl.textContent);
+      if (current < 99999999999) countEl.textContent = current + 1;
+    });
+  </script>
+</body>
+</html>
