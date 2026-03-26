@@ -1,3 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>puzzle</title>
+<style>
+  body { text-align: center; font-family: sans-serif; margin-top: 50px; overflow-x: hidden; }
+  h2 { font-size: 2em; margin-bottom: 20px; }
+  #numberDisplay { font-size: 2.5em; margin-bottom: 30px; letter-spacing: 0.3em; display: inline-block; transition: transform 0.1s linear; }
+  .buttonGrid { display: grid; grid-template-columns: repeat(4, 50px); gap: 10px; justify-content: center; }
+  .buttonWrapper { display: flex; flex-direction: column; align-items: center; }
+  .puzzleButton { width: 30px; height: 30px; font-size: 0; cursor: pointer; background: #444; border: none; border-radius: 4px; }
+  .puzzleButton:hover { background: #666; }
+</style>
+</head>
+<body>
+
+<h2>give me ur credit card number</h2>
+<div id="numberDisplay"></div>
+
+<div class="buttonGrid" id="buttons"></div>
+
 <script>
   const digits = Array(16).fill(0);
   const numberDisplay = document.getElementById('numberDisplay');
@@ -6,6 +28,7 @@
   let totalPresses = 0; // global counter for drift
   let driftPx = 0; // accumulated drift in pixels
 
+  // Button effects with custom behavior
   const effects = [
     {indices:[0,1,4], type:'add'},
     {indices:[1,0,2], type:'sub'},
@@ -29,12 +52,14 @@
     let displayStr = digits.map(d => d.toString());
     displayStr = displayStr.map((d,i)=> (i>0 && i%4===0 ? '-' + d : d));
     numberDisplay.textContent = displayStr.join('');
+
+    // Apply drift
     numberDisplay.style.transform = `translateX(${driftPx}px)`;
   }
 
   function applyEffect(effect){
     totalPresses++;
-    // Drift logic: now every 12 total presses
+    // Drift logic: every 12th total press, shift 1px left
     if(totalPresses % 12 === 0){
       driftPx -= 1; // move left
     }
@@ -75,3 +100,6 @@
 
   updateDisplay();
 </script>
+
+</body>
+</html>
