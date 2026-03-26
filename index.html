@@ -18,9 +18,19 @@
   <script>
     const countEl = document.getElementById('count');
     const btn = document.getElementById('increment');
+    let cooldown = false;
+
     btn.addEventListener('click', () => {
+      if (cooldown) return;        // ignore clicks during cooldown
       let current = parseInt(countEl.textContent);
       if (current < 99999999999) countEl.textContent = current + 1;
+
+      cooldown = true;             // start cooldown
+      btn.disabled = true;         // disable button
+      setTimeout(() => {
+        cooldown = false;
+        btn.disabled = false;      // re-enable button after 1 second
+      }, 1000);
     });
   </script>
 </body>
