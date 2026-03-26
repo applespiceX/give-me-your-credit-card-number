@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Credit Card Slider</title>
+<title>Credit Card Slider (Logarithmic)</title>
 <style>
   body { text-align: center; margin-top: 50px; font-family: sans-serif; }
   h1 { font-size: 3em; margin-bottom: 20px; }
@@ -14,15 +14,23 @@
 
 <h2>give me ur credit card number</h2>
 <h1 id="display">0</h1>
-<input type="range" id="slider" min="0" max="99999999999999999" value="0" step="1">
+<input type="range" id="slider" min="0" max="1000" value="0" step="1">
 
 <script>
   const slider = document.getElementById('slider');
   const display = document.getElementById('display');
 
+  const MIN = 1n;  // smallest value to display (avoid log(0))
+  const MAX = 99999999999999999n; // 17-digit max
+
   slider.addEventListener('input', () => {
-    // Force number to be displayed as full string, no exponential notation
-    display.textContent = slider.value.toString();
+    // Map slider value (0-1000) to logarithmic scale
+    const ratio = BigInt(slider.value);
+    const logMin = Math.log(Number(MIN));
+    const logMax = Math.log(Number(MAX));
+    const scaledLog = logMin + (logMax - logMin) * Number(ratio)/1000;
+    const number = BigInt(Math.floor(Math.exp(scaledLog)));
+    display.textContent = number.toString();
   });
 </script>
 
