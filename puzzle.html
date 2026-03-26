@@ -1,35 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Absurd Credit Card Puzzle</title>
-<style>
-  body { text-align: center; font-family: sans-serif; margin-top: 50px; }
-  h2 { font-size: 2em; margin-bottom: 20px; }
-  #numberDisplay { font-size: 2.5em; margin-bottom: 30px; letter-spacing: 0.3em; }
-  .buttonGrid { display: grid; grid-template-columns: repeat(4, 50px); gap: 10px; justify-content: center; }
-  .buttonWrapper { display: flex; flex-direction: column; align-items: center; }
-  .puzzleButton { width: 30px; height: 30px; font-size: 0; cursor: pointer; background: #444; border: none; border-radius: 4px; }
-  .puzzleButton:hover { background: #666; }
-</style>
-</head>
-<body>
-
-<h2>give me ur credit card number</h2>
-<div id="numberDisplay"></div>
-
-<div class="buttonGrid" id="buttons"></div>
-
 <script>
   const digits = Array(16).fill(0);
   const numberDisplay = document.getElementById('numberDisplay');
   const buttonsDiv = document.getElementById('buttons');
 
-  // Button effects with custom behavior
+  let totalPresses = 0; // global counter for drift
+  let driftPx = 0; // accumulated drift in pixels
+
   const effects = [
     {indices:[0,1,4], type:'add'},
     {indices:[1,0,2], type:'sub'},
-    {indices:[2,1,3,5], type:'plus4thMinus5', clicks:0}, // every 4th click -5
+    {indices:[2,1,3,5], type:'plus4thMinus5', clicks:0},
     {indices:[3,2,6], type:'add'},
     {indices:[4,0,5,8], type:'plus4thMinus5', clicks:0},
     {indices:[5,1,4,6,9], type:'sub'},
@@ -42,16 +22,23 @@
     {indices:[12,8,13], type:'add'},
     {indices:[13,9,12,14], type:'add7'},
     {indices:[14,10,13,15], type:'sub'},
-    {indices:[15,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], type:'chaos'} // super chaotic button
+    {indices:[15,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], type:'chaos'}
   ];
 
   function updateDisplay() {
     let displayStr = digits.map(d => d.toString());
     displayStr = displayStr.map((d,i)=> (i>0 && i%4===0 ? '-' + d : d));
     numberDisplay.textContent = displayStr.join('');
+    numberDisplay.style.transform = `translateX(${driftPx}px)`;
   }
 
   function applyEffect(effect){
+    totalPresses++;
+    // Drift logic: now every 12 total presses
+    if(totalPresses % 12 === 0){
+      driftPx -= 1; // move left
+    }
+
     let increment = 0;
     switch(effect.type){
       case 'add': increment = 1; break;
@@ -67,7 +54,7 @@
           let rand = Math.random() < 0.5 ? 1 : -1;
           digits[idx] = (digits[idx]+rand+10)%10;
         });
-        return; // done, skip normal loop
+        return;
     }
     effect.indices.forEach(idx => digits[idx] = (digits[idx]+increment+10)%10);
   }
@@ -88,6 +75,3 @@
 
   updateDisplay();
 </script>
-
-</body>
-</html>
