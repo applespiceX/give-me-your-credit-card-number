@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Credit Card Slider</title>
+<style>
+  body { text-align: center; margin-top: 50px; font-family: sans-serif; }
+  h1 { font-size: 3em; margin-bottom: 20px; }
+  h2 { font-size: 2em; margin-bottom: 30px; }
+  input[type=range] { width: 80%; }
+</style>
+</head>
+<body>
+
+<h2>give me ur credit card number</h2>
+<h1 id="display">0</h1>
+<input type="range" id="slider" min="0" max="99999999999" value="0" step="1">
+
+<script>
+  const slider = document.getElementById('slider');
+  const display = document.getElementById('display');
+
+  slider.addEventListener('input', () => {
+    display.textContent = slider.value;
+  });
+</script>
+
+</body>
+</html>
