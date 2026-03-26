@@ -21,7 +21,8 @@
   const display = document.getElementById('display');
 
   slider.addEventListener('input', () => {
-    display.textContent = slider.value;
+    // Force number to be displayed as full string, no exponential notation
+    display.textContent = slider.value.toString();
   });
 </script>
 
